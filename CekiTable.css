@@ -1,0 +1,100 @@
+.ceki-table-move *
+{
+    cursor: move;
+}
+
+.ceki-table td,
+.ceki-table th
+{
+    padding: 5px;
+}
+
+.ceki-table__th
+{
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    position: relative;
+}
+
+.ceki-table__th::after
+{
+    display: block;
+    content: ' ';
+    float: right;
+    width: 1em;
+    height: 10px;
+    margin-top: 5px;
+}
+
+.ceki-table__th-drag
+{
+    margin-right: 5px;
+    float: left;
+    cursor: move;
+}
+
+.ceki-table-move .ceki-table
+{
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.ceki-table-move .ceki-table__th-dragzone
+{
+    visibility: visible;
+    pointer-events: all;
+}
+
+.ceki-table__th--move > .ceki-table__th-dragzone
+{
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.ceki-table__th-dragzone
+{
+    visibility: hidden;
+    pointer-events: none;
+    position: absolute;
+    width: 50%;
+    height: 100px;
+}
+
+.ceki-table__th-dragzone--before
+{
+    left: 0;
+}
+
+.ceki-table__th-dragzone--after
+{
+    right: 0;
+}
+
+.ceki-table__th-dragzone--before.ceki-table__th-dragzone--active
+{
+    /* используем box-shadow чтобы избежать странного бага вебкита (box-shadow не влияет на размер блока) */
+    box-shadow: inset 3px 0px 0px 0px rgba(0,0,0,0.75);
+}
+
+.ceki-table__th-dragzone--after.ceki-table__th-dragzone--active
+{
+    box-shadow: 3px 0px 0px 0px rgba(0,0,0,0.75);
+}
+
+.ceki-table__th--active::after,
+.ceki-table__th--reverse::after
+{
+    content: '⌃';
+    transform: rotate(180deg);
+}
+
+.ceki-table__th--reverse::after
+{
+    transform: rotate(0);
+}
+
+.ceki-table__col--active
+{
+    background-color: rgba(0, 255, 0, 0.1);
+}
