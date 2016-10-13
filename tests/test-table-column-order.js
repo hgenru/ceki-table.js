@@ -26,10 +26,10 @@ describe('<CekiTable/>', () => {
             ['Alex', 'Bella', 'Mona']);
     });
 
-    it('should change column order by .changeOrder(columnName, newIndex)', () => {
+    it('should change column order by .changeColumnOrder(currentIndex, newIndex)', () => {
         let element = <CekiTable headers={HEADERS} rows={ROWS}/>;
         let wrapper = shallow(element);
-        wrapper.instance().changeOrder(2, 0);
+        wrapper.instance().changeColumnOrder(2, 0);
         wrapper.instance().state.columnOrder.should.be.deep.equal(
             ['age', 'name', 'sex']);
     });

@@ -18,7 +18,8 @@ export const thClassMove = 'ceki-table__th--move';
 
 export const thClassDragZone = 'ceki-table__th-dragzone';
 export const thClassDragZoneActive_ = `${thClassDragZone}--active`;
-export const thClassDragZoneBefore = `${thClassDragZone} ${thClassDragZone}--before`;
+export const thClassDragZoneBefore_ = `${thClassDragZone}--before`;
+export const thClassDragZoneBefore = `${thClassDragZone} ${thClassDragZoneBefore_}`;
 export const thClassDragZoneAfter = `${thClassDragZone} ${thClassDragZone}--after`;
 
 export const thClassActive = 'ceki-table__th ceki-table__th--active';
@@ -69,7 +70,6 @@ class CekiTable extends Component {
     }
 
     getSortedColumns(headers, rows) {
-        // TODO: cache
         let {columnOrder} = this.state;
         if (!columnOrder) {
             return {headers, rows};
@@ -88,7 +88,11 @@ class CekiTable extends Component {
         return {headers: columnOrder, rows: sortedRows};
     }
 
-    changeOrder(currentIndex, newIndex) {
+    changeColumnOrder(currentIndex, newIndex, insertBefore) {
+        let bounds = insertBefore ? -1 : 1;
+        if (currentIndex === (newIndex + bounds)) {
+            return;
+        }
         let order = this.state.columnOrder || this.props.headers.concat();
         let maxIndex = order.length - 1;
         newIndex = Math.min(newIndex, maxIndex);
@@ -113,16 +117,12 @@ class CekiTable extends Component {
         let currentIndex = Number(
             dragElement.getAttribute('data-column-index')
         );
-        Array.from(dragElement.getElementsByClassName(thClassDragZone)).forEach(
-            (zone) => zone.remove()
-        );
         dragElement.style.position = 'fixed';
         dragElement.style.top = e.clientY + 'px';
         dragElement.style.pointerEvents = 'none';
         document.body.classList.add(bodyMoveClass);
         document.body.appendChild(dragElement);
         this.moveAt(dragElement, e.clientX);
-
         let mousemove = (e) => {
             let {target} = e;
             if (target.classList.contains(thClassDragZone)) {
@@ -137,18 +137,20 @@ class CekiTable extends Component {
             return false;
         };
         let mouseup = (e) => {
+            e.stopPropagation();
             let {target} = e;
             document.removeEventListener('mousemove', mousemove, true);
             document.removeEventListener('mouseup', mouseup, true);
-            document.body.removeChild(dragElement);
             document.body.classList.remove(bodyMoveClass);
+            dragElement.remove();
             originalElement.classList.remove(thClassMove);
             if (target.classList.contains(thClassDragZone)) {
-                console.log(target);
                 let wantIndex = Number(
                     target.getAttribute('data-target-column-index')
                 );
-                this.changeOrder(currentIndex, wantIndex);
+                let insertBefore = target.classList
+                    .contains(thClassDragZoneBefore_);
+                this.changeColumnOrder(currentIndex, wantIndex, insertBefore);
             }
         };
         document.addEventListener('mousemove', mousemove, true);
@@ -167,7 +169,7 @@ class CekiTable extends Component {
         let thActive = sortReverseOrder ?
             thClassActiveReverse : thClassActive;
         return (
-            <table ref="table" className="ceki-table"
+            <table className="ceki-table"
                 onMouseDown={this.handleTableMouseDown.bind(this)}
             >
                 <colgroup>
@@ -188,9 +190,9 @@ class CekiTable extends Component {
                                 data-column-index={index}
                             >
                                 <div className={thClassDragZoneBefore}
-                                    data-target-column-index={index - 1}/>
+                                    data-target-column-index={index}/>
                                 <div className={thClassDragZoneAfter}
-                                    data-target-column-index={index + 1}/>
+                                    data-target-column-index={index}/>
                                 <span className={thClassDrag}>═</span>
                                 <span className={thClassText}>{header}</span>
                             </th>

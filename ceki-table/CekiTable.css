@@ -1,6 +1,12 @@
-.ceki-table-move
+.ceki-table-move *
 {
     cursor: move;
+}
+
+.ceki-table td,
+.ceki-table th
+{
+    padding: 5px;
 }
 
 .ceki-table__th
@@ -26,7 +32,6 @@
     margin-right: 5px;
     float: left;
     cursor: move;
-    pointer-events: auto;
 }
 
 .ceki-table-move .ceki-table
@@ -53,7 +58,7 @@
     pointer-events: none;
     position: absolute;
     width: 50%;
-    height: 999px;
+    height: 100px;
 }
 
 .ceki-table__th-dragzone--before
@@ -68,12 +73,13 @@
 
 .ceki-table__th-dragzone--before.ceki-table__th-dragzone--active
 {
-    border-left: 1px solid;
+    /* используем box-shadow чтобы избежать странного бага вебкита (box-shadow не влияет на размер блока) */
+    box-shadow: inset 3px 0px 0px 0px rgba(0,0,0,0.75);
 }
 
 .ceki-table__th-dragzone--after.ceki-table__th-dragzone--active
 {
-    border-right: 1px solid;
+    box-shadow: 3px 0px 0px 0px rgba(0,0,0,0.75);
 }
 
 .ceki-table__th--active::after,

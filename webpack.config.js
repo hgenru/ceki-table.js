@@ -2,10 +2,6 @@ const IS_PROD = process.env.NODE_ENV !== 'development';
 const path = require('path');
 const webpack = require('webpack');
 
-const entry = {
-    'ceki-table': './ceki-table/CekiTable.jsx'
-};
-
 const basicPlugins = [
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(
@@ -30,15 +26,8 @@ let loaders = [
     }
 ];
 
-module.exports = {
+let baseConfig = {
     devtool: IS_PROD ? 'none' : 'inline-source-map',
-    entry,
-    output: {
-        path: path.resolve('./dist'),
-        filename: '[name].js',
-        library: 'ReactCekiTable',
-        libraryTarget: 'umd'
-    },
     externals: [
         {
             react: {
@@ -57,8 +46,27 @@ module.exports = {
             }
         }
     ],
-    plugins: [
-        ...basicPlugins
-    ],
+    plugins: [...basicPlugins],
     module: {loaders: loaders}
 };
+
+module.exports = [
+    Object.assign({}, {
+        entry: {'ceki-table': './ceki-table/CekiTable.jsx'},
+        output: {
+            path: path.resolve('./dist'),
+            filename: '[name].js',
+            library: 'ReactCekiTable',
+            libraryTarget: 'umd'
+        }
+    }, baseConfig),
+    Object.assign({}, {
+        entry: {'anime-table': './ceki-table/AnimeTable.jsx'},
+        output: {
+            path: path.resolve('./dist'),
+            filename: '[name].js',
+            library: 'ReactAnimeTable',
+            libraryTarget: 'umd'
+        }
+    }, baseConfig)
+];

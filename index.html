@@ -7,26 +7,14 @@
         <script src="./node_modules/react/dist/react.js"></script>
         <script src="./node_modules/react-dom/dist/react-dom.js"></script>
         <script src="ceki-table.js"></script>
+        <script src="anime-table.js"></script>
         <link rel="stylesheet" href="ceki-table/CekiTable.css">
     </head>
     <body>
         <div id="app"></div>
         <script>
-            var headers = ['title', 'studio', 'rating'];
-            var rows = [
-                ['Great Teacher Onizuka', 'Studio Pierrot', 9.2140],
-                ['Code Geass: Lelouch of the Rebellion R2', 'Sunrise', 9.1745],
-                ['Fullmetal Alchemist: Brotherhood', 'Bones', 9.1692],
-                ['Clannad After Story', 'Kyoto Animation', 9.1577],
-                ['Steins;Gate', 'White Fox', 9.1529],
-            ];
-        </script>
-        <script>
             ReactDOM.render(
-                React.createElement(
-                    ReactCekiTable.default,
-                    {headers: headers, rows: rows}
-                ),
+                React.createElement(ReactAnimeTable.default),
                 app
             );
         </script>
